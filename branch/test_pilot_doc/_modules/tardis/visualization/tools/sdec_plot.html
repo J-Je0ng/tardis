@@ -7,7 +7,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   
-  <title>tardis.visualization.tools.sdec_plot &mdash; TARDIS v3.0.dev3994</title>
+  <title>tardis.visualization.tools.sdec_plot &mdash; TARDIS v3.0.dev4019</title>
   
 
   
@@ -72,7 +72,7 @@
             
             
               <div class="version">
-                3.0.dev3994
+                3.0.dev4019
               </div>
             
           
@@ -101,17 +101,19 @@
 <li class="toctree-l1"><a class="reference internal" href="../../../../installation.html">Installation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../../quickstart/quickstart.html">Quickstart for TARDIS</a></li>
 </ul>
-<p class="caption"><span class="caption-text">Using TARDIS</span></p>
+<p class="caption"><span class="caption-text">Input/Output</span></p>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="../../../../using/components/index.html">Components</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../../using/visualization/index.html">Visualization Tools &amp; Widgets</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../../using/interaction/index.html">Additional Interactivity</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../../using/parallelisation/index.html">Parallel execution with Numba and OpenMP</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../io/configuration/index.html">Configuration (Required Input)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../io/optional/index.html">Optional Inputs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../io/visualization/index.html">Visualization Tools &amp; Widgets</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../io/output/index.html">Additional Outputs</a></li>
 </ul>
-<p class="caption"><span class="caption-text">The Physics of TARDIS</span></p>
+<p class="caption"><span class="caption-text">Physics Walkthrough</span></p>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="../../../../physics/montecarlo/index.html">Monte Carlo Primer</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../../physics/plasma/index.html">Plasma</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../physics/setup/index.html">Setting Up the Simulation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../physics/montecarlo/index.html">Monte Carlo Iteration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../physics/est_and_conv/index.html">Estimators and Convergence</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../physics/spectrum/index.html">Spectrum Generation</a></li>
 </ul>
 <p class="caption"><span class="caption-text">Research with TARDIS</span></p>
 <ul>
@@ -138,6 +140,10 @@
 <p class="caption"><span class="caption-text">References</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../../../../zreferences.html">TARDIS Papers and useful References</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Outdated</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../outdated/index.html">Outdated Documentation</a></li>
 </ul>
 
             
@@ -621,12 +627,20 @@
 <span class="sd">        -------</span>
 <span class="sd">        SDECPlotter</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">return</span> <span class="bp">cls</span><span class="p">(</span>
-            <span class="nb">dict</span><span class="p">(</span>
-                <span class="n">virtual</span><span class="o">=</span><span class="n">SDECData</span><span class="o">.</span><span class="n">from_simulation</span><span class="p">(</span><span class="n">sim</span><span class="p">,</span> <span class="s2">&quot;virtual&quot;</span><span class="p">),</span>
-                <span class="n">real</span><span class="o">=</span><span class="n">SDECData</span><span class="o">.</span><span class="n">from_simulation</span><span class="p">(</span><span class="n">sim</span><span class="p">,</span> <span class="s2">&quot;real&quot;</span><span class="p">),</span>
+        <span class="k">if</span> <span class="n">sim</span><span class="o">.</span><span class="n">runner</span><span class="o">.</span><span class="n">virt_logging</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">cls</span><span class="p">(</span>
+                <span class="nb">dict</span><span class="p">(</span>
+                    <span class="n">virtual</span><span class="o">=</span><span class="n">SDECData</span><span class="o">.</span><span class="n">from_simulation</span><span class="p">(</span><span class="n">sim</span><span class="p">,</span> <span class="s2">&quot;virtual&quot;</span><span class="p">),</span>
+                    <span class="n">real</span><span class="o">=</span><span class="n">SDECData</span><span class="o">.</span><span class="n">from_simulation</span><span class="p">(</span><span class="n">sim</span><span class="p">,</span> <span class="s2">&quot;real&quot;</span><span class="p">),</span>
+                <span class="p">)</span>
             <span class="p">)</span>
-        <span class="p">)</span></div>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">cls</span><span class="p">(</span>
+                <span class="nb">dict</span><span class="p">(</span>
+                    <span class="n">virtual</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                    <span class="n">real</span><span class="o">=</span><span class="n">SDECData</span><span class="o">.</span><span class="n">from_simulation</span><span class="p">(</span><span class="n">sim</span><span class="p">,</span> <span class="s2">&quot;real&quot;</span><span class="p">),</span>
+                <span class="p">)</span>
+            <span class="p">)</span></div>
 
 <div class="viewcode-block" id="SDECPlotter.from_hdf"><a class="viewcode-back" href="../../../../api/tardis.visualization.tools.sdec_plot.html#tardis.visualization.tools.sdec_plot.SDECPlotter.from_hdf">[docs]</a>    <span class="nd">@classmethod</span>
     <span class="k">def</span> <span class="nf">from_hdf</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">hdf_fpath</span><span class="p">):</span>
@@ -772,6 +786,15 @@
             <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
                 <span class="s2">&quot;Invalid value passed to packets_mode. Only &quot;</span>
                 <span class="s2">&quot;allowed values are &#39;virtual&#39; or &#39;real&#39;&quot;</span>
+            <span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">packets_mode</span> <span class="o">==</span> <span class="s2">&quot;virtual&quot;</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="n">packets_mode</span><span class="p">]</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                <span class="s2">&quot;SDECPlotter doesn&#39;t have any data for virtual packets population and SDEC &quot;</span>
+                <span class="s2">&quot;plot for the same was requested. Either set virtual_packet_logging: True &quot;</span>
+                <span class="s2">&quot;in your configuration file to generate SDEC plot with virtual packets, or &quot;</span>
+                <span class="s2">&quot;pass packets_mode=&#39;real&#39; in your function call to generate SDEC plot with &quot;</span>
+                <span class="s2">&quot;real packets.&quot;</span>
             <span class="p">)</span>
 
         <span class="c1"># Store the plottable range of each spectrum property which is</span>
@@ -1456,7 +1479,7 @@
             <span class="k">except</span><span class="p">:</span>
                 <span class="c1"># Add notifications that this species was not in the emission df</span>
                 <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_species_list</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-                    <span class="n">longer</span><span class="o">.</span><span class="n">info</span><span class="p">(</span>
+                    <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span>
                         <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">atomic_number2element_symbol</span><span class="p">(</span><span class="n">identifier</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span>
                         <span class="sa">f</span><span class="s2">&quot; is not in the emitted packets; skipping&quot;</span>
                     <span class="p">)</span>
@@ -1512,7 +1535,7 @@
             <span class="k">except</span><span class="p">:</span>
                 <span class="c1"># Add notifications that this species was not in the emission df</span>
                 <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_species_list</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-                    <span class="n">longer</span><span class="o">.</span><span class="n">info</span><span class="p">(</span>
+                    <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span>
                         <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">atomic_number2element_symbol</span><span class="p">(</span><span class="n">identifier</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span>
                         <span class="sa">f</span><span class="s2">&quot; is not in the absorbed packets; skipping&quot;</span>
                     <span class="p">)</span>
@@ -1847,7 +1870,7 @@
             <span class="k">except</span><span class="p">:</span>
                 <span class="c1"># Add notifications that this species was not in the emission df</span>
                 <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_species_list</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-                    <span class="n">longer</span><span class="o">.</span><span class="n">info</span><span class="p">(</span>
+                    <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span>
                         <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">atomic_number2element_symbol</span><span class="p">(</span><span class="n">identifier</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span>
                         <span class="sa">f</span><span class="s2">&quot; is not in the emitted packets; skipping&quot;</span>
                     <span class="p">)</span>
@@ -1900,7 +1923,7 @@
             <span class="k">except</span><span class="p">:</span>
                 <span class="c1"># Add notifications that this species was not in the emission df</span>
                 <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_species_list</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-                    <span class="n">longer</span><span class="o">.</span><span class="n">info</span><span class="p">(</span>
+                    <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span>
                         <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">atomic_number2element_symbol</span><span class="p">(</span><span class="n">identifier</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span>
                         <span class="sa">f</span><span class="s2">&quot; is not in the absorbed packets; skipping&quot;</span>
                     <span class="p">)</span>
